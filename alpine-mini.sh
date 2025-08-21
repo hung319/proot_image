@@ -54,7 +54,7 @@ else
 fi
 
 clear && cat << "EOF"
-Welcome to Debian rootfs!
+Welcome to Alpine rootfs!
 EOF
 
 "$ROOTFS_DIR/usr/local/bin/proot" \
@@ -67,4 +67,4 @@ EOF
     --bind=/dev \
     --bind=/sys \
     --bind=/tmp \
-    /bin/bash
+    /bin/sh
