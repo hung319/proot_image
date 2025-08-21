@@ -16,14 +16,12 @@ fi
 OS_VERSION="24"
 IMAGE_URL="https://cdimage.ubuntu.com/ubuntu-core/${OS_VERSION}/stable/current/ubuntu-core-${OS_VERSION}-${ARCH_PD}.img.xz"
 
-mkdir -p tmp
 if [ -e "$ROOTFS_DIR/.installed" ]; then
     echo "OS đã được cài rồi, skip bước cài đặt"
 else
     echo "[*] Đang tải rootfs..."
+    mkdir -p "$ROOTFS_DIR/tmp"
     curl -Lo ./tmp/rootfs.tar.xz "$IMAGE_URL"
-
-    mkdir -p "$ROOTFS_DIR"
     tar -xvf ./tmp/rootfs.tar.xz -C "$ROOTFS_DIR"
 
     mkdir -p $ROOTFS_DIR/usr/local/bin
