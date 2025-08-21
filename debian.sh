@@ -16,7 +16,7 @@ else
 fi
 
 OS_VERSION="stable"
-IMAGE_URL="https://github.com/debuerreotype/docker-debian-artifacts/raw/refs/heads/dist-${ARCH_PD}/${OS_VERSION}/slim/oci/blobs/rootfs.tar.gz"
+IMAGE_URL="https://github.com/debuerreotype/docker-debian-artifacts/raw/refs/heads/dist-${ARCH_PD}/${OS_VERSION}/oci/blobs/rootfs.tar.gz"
 
 if [ -e "$ROOTFS_DIR/.installed" ]; then
     echo "OS đã được cài rồi, skip bước cài đặt"
