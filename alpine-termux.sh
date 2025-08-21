@@ -24,7 +24,7 @@ else
     echo "[*] Đang tải rootfs..."
     mkdir -p "$ROOTFS_DIR/tmp"
     curl -Lo ./tmp/rootfs.tar.xz "$IMAGE_URL"
-    tar -xvf ./tmp/rootfs.tar.xz -C "$ROOTFS_DIR"
+    tar --strip-components=1 -xvf ./tmp/rootfs.tar.xz -C "$ROOTFS_DIR"
 
     mkdir -p $ROOTFS_DIR/usr/local/bin
     echo "[*] Đang tải proot..."
