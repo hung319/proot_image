@@ -27,14 +27,12 @@ fi
 LATEST_ENC=$(echo "$LATEST" | sed 's/:/%3A/')
 IMAGE_URL="${BASE_URL}/${LATEST_ENC}/rootfs.tar.xz"
 
-mkdir -p tmp
 if [ -e "$ROOTFS_DIR/.installed" ]; then
     echo "OS đã được cài rồi, skip bước cài đặt"
 else
     echo "[*] Đang tải openSUSE rootfs bản mới nhất ($LATEST)..."
+    mkdir -p "$ROOTFS_DIR/tmp"
     curl -Lo ./tmp/rootfs.tar.xz "$IMAGE_URL"
-
-    mkdir -p "$ROOTFS_DIR"
     tar -xvf ./tmp/rootfs.tar.xz -C "$ROOTFS_DIR"
 
     mkdir -p "$ROOTFS_DIR/usr/local/bin"
