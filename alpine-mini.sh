@@ -31,7 +31,7 @@ else
     mkdir -p $ROOTFS_DIR/usr/local/bin
     curl -Lo ./tmp/apk-tools-static.apk "https://dl-cdn.alpinelinux.org/alpine/v${OS_VERSION}/main/${ARCH}/apk-tools-static-${APK_TOOLS_VERSION}.apk"
     curl -Lo ./tmp/gotty.tar.gz "https://github.com/sorenisanerd/gotty/releases/download/v1.6.0/gotty_v1.6.0_linux_${ARCH_PD}.tar.gz"
-    tar -xzf ./tmp/apk-tools-static.apk -C /tmp/
+    tar -xvf ./tmp/apk-tools-static.apk -C ./tmp/ || true
     tar -xzf ./tmp/gotty.tar.gz -C $ROOTFS_DIR/usr/local/bin
     ./tmp/sbin/apk.static -X "https://dl-cdn.alpinelinux.org/alpine/v${OS_VERSION}/main/" -U --allow-untrusted --root $ROOTFS_DIR add alpine-base apk-tools
     chmod 755 $ROOTFS_DIR/usr/local/bin/proot $ROOTFS_DIR/usr/local/bin/gotty
