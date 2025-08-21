@@ -14,13 +14,25 @@ else
 fi
 
 OS_VERSION="tumbleweed"
-IMAGE_URL="https://sgp1lxdmirror01.do.letsbuildthe.cloud/images/opensuse/${OS_VERSION}/${ARCH_PD}/default/20250820_04%3A20/rootfs.tar.xz"
+BASE_URL="https://sgp1lxdmirror01.do.letsbuildthe.cloud/images/opensuse/${OS_VERSION}/${ARCH_PD}/default"
+
+# Lấy folder mới nhất theo timestamp
+LATEST=$(curl -s "$BASE_URL/" \
+    | grep -oP '20[0-9]{6}_[0-9]{2}:[0-9]{2}' \
+    | sort -r | head -n1)
+
+if [ -z "$LATEST" ]; then
+    echo "Không tìm thấy bản mới nhất!"
+    exit 1
+fi
+
+IMAGE_URL="${BASE_URL}/${LATEST}/rootfs.tar.xz"
 
 mkdir -p tmp
 if [ -e "$ROOTFS_DIR/.installed" ]; then
     echo "OS đã được cài rồi, skip bước cài đặt"
 else
-    echo "[*] Đang tải rootfs..."
+    echo "[*] Đang tải rootfs bản mới nhất ($LATEST)..."
     curl -Lo ./tmp/rootfs.tar.xz "$IMAGE_URL"
 
     mkdir -p "$ROOTFS_DIR"
@@ -43,7 +55,7 @@ else
 fi
 
 clear && cat << "EOF"
-Welcome to Ubuntu rootfs!
+Welcome to openSUSE Tumbleweed rootfs!
 EOF
 
 "$ROOTFS_DIR/usr/local/bin/proot" \
