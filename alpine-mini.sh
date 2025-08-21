@@ -29,6 +29,11 @@ else
     tar -xvf ./tmp/rootfs.tar.gz -C "$ROOTFS_DIR"
 
     mkdir -p $ROOTFS_DIR/usr/local/bin
+    echo "[*] Đang tải proot..."
+    curl -Lo "$ROOTFS_DIR/usr/local/bin/proot" \
+        "https://github.com/proot-me/proot/releases/download/v${PROOT_VERSION}/proot-v${PROOT_VERSION}-${ARCH}-static"
+    chmod 755 "$ROOTFS_DIR/usr/local/bin/proot"
+    echo "[*] Đang tải apk và gotty..."
     curl -Lo ./tmp/apk-tools-static.apk "https://dl-cdn.alpinelinux.org/alpine/v${OS_VERSION}/main/${ARCH}/apk-tools-static-${APK_TOOLS_VERSION}.apk"
     curl -Lo ./tmp/gotty.tar.gz "https://github.com/sorenisanerd/gotty/releases/download/v1.6.0/gotty_v1.6.0_linux_${ARCH_PD}.tar.gz"
     tar -xvf ./tmp/apk-tools-static.apk -C ./tmp/ || true
@@ -36,10 +41,6 @@ else
     ./tmp/sbin/apk.static -X "https://dl-cdn.alpinelinux.org/alpine/v${OS_VERSION}/main/" -U --allow-untrusted --root $ROOTFS_DIR add alpine-base apk-tools
     chmod 755 $ROOTFS_DIR/usr/local/bin/proot $ROOTFS_DIR/usr/local/bin/gotty
 
-    echo "[*] Đang tải proot..."
-    curl -Lo "$ROOTFS_DIR/usr/local/bin/proot" \
-        "https://github.com/proot-me/proot/releases/download/v${PROOT_VERSION}/proot-v${PROOT_VERSION}-${ARCH}-static"
-    chmod 755 "$ROOTFS_DIR/usr/local/bin/proot"
 
     echo "[*] Set DNS"
     echo "nameserver 1.1.1.1" > "$ROOTFS_DIR/etc/resolv.conf"
