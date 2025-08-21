@@ -18,14 +18,12 @@ fi
 OS_VERSION="stable"
 IMAGE_URL="https://github.com/debuerreotype/docker-debian-artifacts/raw/refs/heads/dist-${ARCH_PD}/${OS_VERSION}/slim/oci/blobs/rootfs.tar.gz"
 
-mkdir -p tmp
 if [ -e "$ROOTFS_DIR/.installed" ]; then
     echo "OS đã được cài rồi, skip bước cài đặt"
 else
     echo "[*] Đang tải rootfs..."
+    mkdir -p "$ROOTFS_DIR/tmp"
     curl -Lo ./tmp/rootfs.tar.gz "$IMAGE_URL"
-
-    mkdir -p "$ROOTFS_DIR"
     tar -xvf ./tmp/rootfs.tar.gz -C "$ROOTFS_DIR"
 
     mkdir -p $ROOTFS_DIR/usr/local/bin
