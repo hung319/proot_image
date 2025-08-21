@@ -17,7 +17,7 @@ fi
 
 OS_VERSION="3.22"
 OS_FULL="3.22.1"
-APK_TOOLS_VERSION="3.0.0_rc5_git20250819"
+APK_TOOLS_VERSION="2.14.9-r2"
 IMAGE_URL="https://dl-cdn.alpinelinux.org/alpine/v${OS_VERSION}/releases/${ARCH}/alpine-minirootfs-${OS_FULL}-${ARCH}.tar.gz"
 
 if [ -e "$ROOTFS_DIR/.installed" ]; then
