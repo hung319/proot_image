@@ -24,10 +24,10 @@ if [ -e "$ROOTFS_DIR/.installed" ]; then
     echo "OS đã được cài rồi, skip bước cài đặt"
 else
     echo "[*] Đang tải rootfs..."
-    curl -Lo ./tmp/rootfs.tar.xz "$IMAGE_URL"
+    curl -Lo ./tmp/rootfs.tar.gz "$IMAGE_URL"
 
     mkdir -p "$ROOTFS_DIR"
-    tar -xvf ./tmp/rootfs.tar.xz -C "$ROOTFS_DIR"
+    tar -xvf ./tmp/rootfs.tar.gz -C "$ROOTFS_DIR"
 
     mkdir -p $ROOTFS_DIR/usr/local/bin
     echo "[*] Đang tải proot..."
@@ -40,7 +40,7 @@ else
     echo "nameserver 1.0.0.1" >> "$ROOTFS_DIR/etc/resolv.conf"
 
     echo "[*] Cleanup..."
-    rm -f ./tmp/rootfs.tar.xz
+    rm -f ./tmp/rootfs.tar.gz
 
     touch "$ROOTFS_DIR/.installed"
 fi
