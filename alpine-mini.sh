@@ -24,9 +24,8 @@ if [ -e "$ROOTFS_DIR/.installed" ]; then
     echo "OS đã được cài rồi, skip bước cài đặt"
 else
     echo "[*] Đang tải rootfs..."
-    curl -Lo ./tmp/rootfs.tar.gz "$IMAGE_URL"
-
     mkdir -p "$ROOTFS_DIR/tmp"
+    curl -Lo ./tmp/rootfs.tar.gz "$IMAGE_URL"
     tar -xvf ./tmp/rootfs.tar.gz -C "$ROOTFS_DIR"
 
     mkdir -p $ROOTFS_DIR/usr/local/bin
@@ -48,6 +47,8 @@ else
 
     echo "[*] Cleanup..."
     rm -f ./tmp/rootfs.tar.gz
+    rm -f ./tmp/apk-tools-static.apk
+    rm -f ./tmp/gotty.tar.gz
 
     touch "$ROOTFS_DIR/.installed"
 fi
