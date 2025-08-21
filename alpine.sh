@@ -14,31 +14,30 @@ else
 fi
 
 OS_VERSION="3.22"
-BASE_URL="https://images.linuxcontainers.org/images/${OS_VERSION}/${ARCH_PD}/default"
+BASE_URL="https://images.linuxcontainers.org/images/alpine/${OS_VERSION}/${ARCH_PD}/default"
 
-# Lấy folder mới nhất theo timestamp
-LATEST=$(curl -s "$BASE_URL/" \
-    | grep -oP '20[0-9]{6}_[0-9]{2}:[0-9]{2}' \
-    | sort -r | head -n1)
-
+# Lấy folder mới nhất
+LATEST=$(curl -s "$BASE_URL/" | grep -oE '20[0-9]{6}_[0-9]{2}:[0-9]{2}' | sort -r | head -n1)
 if [ -z "$LATEST" ]; then
-    echo "Không tìm thấy bản mới nhất!"
+    echo "Không tìm thấy bản Alpine mới nhất!"
     exit 1
 fi
 
-IMAGE_URL="${BASE_URL}/${LATEST}/rootfs.tar.xz"
+# Encode dấu ":"
+LATEST_ENC=$(echo "$LATEST" | sed 's/:/%3A/')
+IMAGE_URL="${BASE_URL}/${LATEST_ENC}/rootfs.tar.xz"
 
 mkdir -p tmp
 if [ -e "$ROOTFS_DIR/.installed" ]; then
     echo "OS đã được cài rồi, skip bước cài đặt"
 else
-    echo "[*] Đang tải rootfs bản mới nhất ($LATEST)..."
+    echo "[*] Đang tải Alpine rootfs bản mới nhất ($LATEST)..."
     curl -Lo ./tmp/rootfs.tar.xz "$IMAGE_URL"
 
     mkdir -p "$ROOTFS_DIR"
     tar -xvf ./tmp/rootfs.tar.xz -C "$ROOTFS_DIR"
 
-    mkdir -p $ROOTFS_DIR/usr/local/bin
+    mkdir -p "$ROOTFS_DIR/usr/local/bin"
     echo "[*] Đang tải proot..."
     curl -Lo "$ROOTFS_DIR/usr/local/bin/proot" \
         "https://github.com/proot-me/proot/releases/download/v${PROOT_VERSION}/proot-v${PROOT_VERSION}-${ARCH}-static"
