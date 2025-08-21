@@ -14,7 +14,7 @@ else
 fi
 
 OS_VERSION="3.22"
-BASE_URL="https://sgp1lxdmirror01.do.letsbuildthe.cloud/images/alpine/${OS_VERSION}/${ARCH_PD}/default"
+BASE_URL="https://images.linuxcontainers.org/images/${OS_VERSION}/${ARCH_PD}/default"
 
 # Lấy folder mới nhất theo timestamp
 LATEST=$(curl -s "$BASE_URL/" \
