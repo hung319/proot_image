@@ -5,29 +5,38 @@ PROOT_VERSION="5.3.0"
 
 ARCH=$(uname -m)
 if [ "$ARCH" = "x86_64" ]; then
-    ARCH_PD="x86_64"
+    ARCH_PD="amd64"
 elif [ "$ARCH" = "aarch64" ]; then
-    ARCH_PD="aarch64"
-elif [ "$ARCH" = "armv7l" ]; then
-    ARCH_PD="armv7"
+    ARCH_PD="arm64"
 else
     echo "Unsupported architecture: $ARCH"
     exit 1
 fi
 
 OS_VERSION="3.22"
-OS_FULL="3.22.1"
-IMAGE_URL="https://github.com/alpinelinux/docker-alpine/raw/refs/heads/v${OS_VERSION}/${ARCH_PD}/alpine-minirootfs-${OS_FULL}-${ARCH_PD}.tar.gz"
+BASE_URL="https://sgp1lxdmirror01.do.letsbuildthe.cloud/images/alpine/${OS_VERSION}/${ARCH_PD}/default"
+
+# Lấy folder mới nhất theo timestamp
+LATEST=$(curl -s "$BASE_URL/" \
+    | grep -oP '20[0-9]{6}_[0-9]{2}:[0-9]{2}' \
+    | sort -r | head -n1)
+
+if [ -z "$LATEST" ]; then
+    echo "Không tìm thấy bản mới nhất!"
+    exit 1
+fi
+
+IMAGE_URL="${BASE_URL}/${LATEST}/rootfs.tar.xz"
 
 mkdir -p tmp
 if [ -e "$ROOTFS_DIR/.installed" ]; then
     echo "OS đã được cài rồi, skip bước cài đặt"
 else
-    echo "[*] Đang tải rootfs..."
-    curl -Lo ./tmp/rootfs.tar.gz "$IMAGE_URL"
+    echo "[*] Đang tải rootfs bản mới nhất ($LATEST)..."
+    curl -Lo ./tmp/rootfs.tar.xz "$IMAGE_URL"
 
     mkdir -p "$ROOTFS_DIR"
-    tar -xvf ./tmp/rootfs.tar.gz -C "$ROOTFS_DIR"
+    tar -xvf ./tmp/rootfs.tar.xz -C "$ROOTFS_DIR"
 
     mkdir -p $ROOTFS_DIR/usr/local/bin
     echo "[*] Đang tải proot..."
@@ -40,7 +49,7 @@ else
     echo "nameserver 1.0.0.1" >> "$ROOTFS_DIR/etc/resolv.conf"
 
     echo "[*] Cleanup..."
-    rm -f ./tmp/rootfs.tar.gz
+    rm -f ./tmp/rootfs.tar.xz
 
     touch "$ROOTFS_DIR/.installed"
 fi
